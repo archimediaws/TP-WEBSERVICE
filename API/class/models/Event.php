@@ -1,5 +1,5 @@
 <?php
-class Note extends Model implements JsonSerializable {
+class Event extends Model implements JsonSerializable {
 
     private $title;
     private $content;

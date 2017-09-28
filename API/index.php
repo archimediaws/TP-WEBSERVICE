@@ -8,43 +8,43 @@ require "autoload.php";
 //Enregistrer en global dans Flight le BddManager
 Flight::set("BddManager", new BddManager());
 
-//Lire toutes les notes
-Flight::route("GET /notes", function(){
+//Lire toutes les events
+Flight::route("GET /events", function(){
 
     $bddManager = Flight::get("BddManager");
-    $repo = $bddManager->getNoteRepository();
-    $notes = $repo->getAll();
+    $repo = $bddManager->getEventRepository();
+    $events = $repo->getAll();
 
     echo json_encode ( $notes );
 
 });
 
-//Récuperer la note @id
-Flight::route("GET /note/@id", function( $id ){
+//Récuperer l'event @id
+Flight::route("GET /event/@id", function( $id ){
     
     $status = [
         "success" => false,
         "note" => false
     ];
 
-    $note = new Note();
-    $note->setId( $id );
+    $event = new Event();
+    $event->setId( $id );
 
     $bddManager = Flight::get("BddManager");
-    $repo = $bddManager->getNoteRepository();
-    $note = $repo->getById( $note );
+    $repo = $bddManager->getEventRepository();
+    $event = $repo->getById( $event );
 
-    if( $note != false ){
+    if( $event != false ){
         $status["success"] = true;
-        $status["note"] = $note;
+        $status["note"] = $event;
     }
 
     echo json_encode( $status );
 
 });
 
-//Créer une note
-Flight::route("POST /note", function(){
+//Créer un event
+Flight::route("POST /event", function(){
 
     $title = Flight::request()->data["title"];
     $content = Flight::request()->data["content"];
@@ -56,13 +56,13 @@ Flight::route("POST /note", function(){
 
     if( strlen( $title ) > 0 && strlen( $content ) > 0 ) {
 
-        $note = new Note();
-        $note->setTitle( $title );
-        $note->setContent( $content );
+        $event = new Event();
+        $event->setTitle( $title );
+        $event->setContent( $content );
 
         $bddManager = Flight::get("BddManager");
-        $repo = $bddManager->getNoteRepository();
-        $id = $repo->save( $note );
+        $repo = $bddManager->getEventRepository();
+        $id = $repo->save( $event );
 
         if( $id != 0 ){
             $status["success"] = true;
@@ -75,19 +75,19 @@ Flight::route("POST /note", function(){
     
 });
 
-//Supprimer la note @id
-Flight::route("DELETE /note/@id", function( $id ){
+//Supprimer l'event à l' @id
+Flight::route("DELETE /event/@id", function( $id ){
 
     $status = [
         "success" => false
     ];
 
-    $note = new Note();
-    $note->setId( $id );
+    $event = new Event();
+    $event->setId( $id );
 
     $bddManager = Flight::get("BddManager");
-    $repo = $bddManager->getNoteRepository();
-    $rowCount = $repo->delete( $note );
+    $repo = $bddManager->getEventRepository();
+    $rowCount = $repo->delete( $event );
 
     if( $rowCount == 1 ){
         $status["success"] = true;
@@ -97,7 +97,7 @@ Flight::route("DELETE /note/@id", function( $id ){
     
 });
 
-Flight::route("PUT /note/@id", function( $id ){
+Flight::route("PUT /event/@id", function( $id ){
 
     //Pour récuperer des données PUT -> les données sont encodé en json string
     //avec ajax, puis décodé ici en php
@@ -113,14 +113,14 @@ Flight::route("PUT /note/@id", function( $id ){
         $title = $_PUT["title"];
         $content = $_PUT["content"];
 
-        $note = new Note();
-        $note->setId( $id );
-        $note->setTitle( $title );
-        $note->setContent( $content );
+        $event = new Event();
+        $event->setId( $id );
+        $event->setTitle( $title );
+        $event->setContent( $content );
 
         $bddManager = Flight::get("BddManager");
-        $repo = $bddManager->getNoteRepository();
-        $rowCount = $repo->save( $note );
+        $repo = $bddManager->getEventRepository();
+        $rowCount = $repo->save( $event );
 
         if( $rowCount == 1 ){
             $status["success"] = true;

@@ -7,7 +7,7 @@ class Connection {
       
         if( empty( self::$connection ) ){    
             self::$connection = new PDO(
-                "mysql:dbname=courwebservice;host=localhost",
+                "mysql:dbname=bddevents;host=localhost",
                 "root",
                 ""
             );
@@ -20,7 +20,3 @@ class Connection {
 
 }
 
-//
-//->getConnection(); //Tout le temps la meme connexion
-// new Connection() -> impossible a faire de l'exterrieur
-// Singleton pattern

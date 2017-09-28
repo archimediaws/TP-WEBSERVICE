@@ -1,5 +1,5 @@
 <?php 
-function myautoload( $classname ){ //Note
+function myautoload( $classname ){ 
 
     $folders = [
         "class/",
