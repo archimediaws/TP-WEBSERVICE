@@ -4,9 +4,12 @@ header("Access-Control-Allow-Origin:*", false);
 
 require "flight/Flight.php"; 
 require "autoload.php";
-
+session_start();
 //Enregistrer en global dans Flight le BddManager
 Flight::set("BddManager", new BddManager());
+
+
+// route EVENT
 
 //Lire toutes les events
 Flight::route("GET /events", function(){
@@ -113,12 +116,7 @@ Flight::route("POST /event/@id", function($id){
             $repo = $bddManager->getEventRepository();
             $rowCount = $repo->save( $event );
     
-            // $id = $repo->save( $event );
-    
-            // if( $id != 0 ){
-            //     $status["success"] = true;
-            //     $status["id"] = $id;
-            // }
+            
             if( $rowCount == 1 ){
                 $status["success"] = true;
             }
@@ -191,5 +189,108 @@ Flight::route("PUT /event/@id", function( $id ){
     echo json_encode( $status );
 
 });
+
+
+// ROUTE USER
+
+// LOGIN 
+
+Flight::route("POST /user/login", function(){ // route login user en objet PHP 
+    
+        $username = Flight::request()->data['username'];
+        $Upassword = Flight::request()->data['Upassword'];
+
+        
+        $user = new User();
+        $user->setUsername ($username);
+        $user->setUpassword ($Upassword);
+    
+        $bddManager = Flight::get("BddManager");
+        $repo = $bddManager->getUserRepository();
+        $findedUser = $repo->getUserByUsername($user);
+    
+        $status = [
+            "success" => "",
+            "error" => "",
+            "user" => ""
+        ];
+    
+        if( $findedUser == false ){
+            $status["success"] = false;
+            $status["error"] = "identifiant incorrect";
+        }
+        else if( $findedUser->getUpassword()  != $user->getUpassword()){
+            
+            $status["success"] = false;
+            $status["error"] = "mot de passe incorrect";
+        }
+        else {
+            
+            $status["success"] = true;
+            $status["user"] = $findedUser;
+        }
+    
+    
+        echo json_encode($status); // tranforme une variable en JSON
+    
+    });
+
+    // REGISTER
+
+Flight::route("POST /user/register", function(){ // route login user en objet PHP 
+    
+        unset($_SESSION['erreur']);
+
+        $service = new RegisterService();
+        $service->setParams(Flight::request()->data->getData());
+        $service->launchControls();
+
+        $status = [
+            "success" => "",
+            "error" => "",
+            "user" => ""
+        ];
+
+
+        if($service->getError()){
+            $_SESSION['erreur']=$service->getError();
+            // Flight::redirect('/');
+            $status["success"] = false;
+            $status["error"] = "il y a des erreurs dans formulaire enregistrement";
+        }
+        else
+        {
+
+
+        $username = Flight::request()->data['username'];
+        $Upassword = Flight::request()->data['Upassword'];
+
+        
+        $user = new User();
+        $user->setUsername ($username);
+        $user->setUpassword ($Upassword);
+    
+        $bddManager = Flight::get("BddManager");
+        $repo = $bddManager->getUserRepository();
+        $createdUser = $repo->getUserByUsername($user);
+    
+    
+            
+            $status["success"] = true;
+            $status["user"] = $createdUser;
+        }
+    
+    
+        echo json_encode($status); // tranforme une variable en JSON
+    
+    });
+
+
+
+    Flight::route('/deconnexion', function(){
+		unset( $_SESSION['user'] );
+		session_destroy();
+	
+	});
 
 Flight::start();

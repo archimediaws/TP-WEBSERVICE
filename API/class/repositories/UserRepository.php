@@ -32,6 +32,24 @@ class UserRepository extends Repository {
         
     }
 
+    public function getUserByUsername(User $user){
+        $prep = $this->connection->prepare('SELECT * FROM user WHERE username=:username');
+        $prep->execute(array(
+            'username'=> $user->getUsername()
+            
+        ));
+        $result = $prep->fetch(PDO::FETCH_ASSOC);
+
+        if( empty( $result)){
+            return false;
+        }
+        else{
+            return new User($result);
+        }
+
+        
+    }
+
     function save( User $user ){
         if( empty( $user->getId() ) ){
             return $this->insert( $user );
@@ -47,7 +65,7 @@ class UserRepository extends Repository {
         $prep = $this->connection->prepare( $query );
         $prep->execute( [
             "username" => $user->getUsername(),
-            "upassword" => $user->getUpassword()
+            "Upassword" => $user->getUpassword()
         ] );
         return $this->connection->lastInsertId();
 
