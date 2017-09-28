@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>JAVASCRIPT POO TP EVENTS</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link href="css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+    
+    <link rel="stylesheet" href="js/jquery-ui/jquery-ui.min.css" >
+    <link rel="stylesheet" href="js/jquery-ui/jquery-ui.css" >
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    
+    
+</head>
+<body>
+    <div id="container_events">
+        
+    <!-- <div class="event">
+        <h2>Nom de l'evenement</h2>
+        <div class="openeventinfos"> voir détails </div>
+    </div> --> 
+        
+
+    <div id="eventinfos">
+        <div id="container_eventinfos">
+            <div id="close">x</div>
+                    <h2></h2>
+                    <span>description : </span> <p id="descriptioninfos"></p>
+                    <span>du : </span><h4 id="d_event"></h4>
+                    <span>au : </span><h4 id="e_event"></h4>
+                              
+        </div>         
+    </div>
+
+    <div id="calendrier">
+
+            <!--calendar --> 
+
+<section id="availability-calendar" class="calendar white-bg page-section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                    <h4>Calendrier des événements</h4>
+                </div>
+            </div>
+    
+            <div class="row">
+                <div class="col-lg-12 col-md-12">
+                        <div class="main-calendar clearfix">
+                                <div class="row">   
+                                    <div class="col-lg-7 col-md-7">   
+                                        <div class="calendar-section">
+                                            <div class="calendar-block">
+                                                <div id="datepicker"> </div> 
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="col-lg-5 col-md-5">  
+                                            <div class="date-block">
+                                                <div class="date-area">
+                                                    <span class="day" id="day"></span><span class="date" id="date"></span><span class="month" id="mnt"></span><div class="clr"></div>
+                                                </div>
+    
+                                                <div class="dateinfo">
+                                                    <div class="block"><span class="today"></span>Aujourd'hui</div>
+                                                    <div class="block"><span class="event_cal"></span> Evénement  </div>
+                                                    <div class="block"><p>Cliquer sur la date pour voir le détail</p> </div>
+                                                </div>
+    
+                                            </div>
+                                    </div>
+    
+                                    <div class="clr"></div>
+    
+                                </div>
+                        </div> 
+                </div>
+            </div>
+        </div> <!-- end container fluid -->
+       </section>
+
+    </div>
+
+
+    </div> <!-- end container_events -->
+
+
+
+
+    <div id="container_form_events">
+        
+        <p> cliquez ici pour ajouter un événement ...</p>
+        <div id="add"> + </div>
+
+        <form class="form-group" role="group" id="add-event">
+            <label for="event"> Titre </label><input class="form-control" type="text" id="event" placeholder="Titre"><br>
+            <label for="description"> Description </label> <input id="description"  class="form-control" type="text" placeholder="Description"><br>
+            <label for="date_start"> Date début </label> <input id="date_start"  class="form-control" type="text"><br>
+            <label for="date_end"> Date fin </label> <input id="date_end" class="form-control" type="text"><br>
+            <!-- <input id="date_start_3" class="form-control" type="text"><br> -->
+            <input class="btn btn-primary" type="submit" value="Ajouter">
+        </form>
+
+        <hr>
+
+        <div id="alert">
+                <div class="alert alert-success">
+                        <strong>DEBUTE AUJOURD'HUI : </strong>
+                        <div>
+                             <ul id="events_today">
+                                 <!-- <li></li> -->
+                            </ul>
+                        </div>    
+                </div>
+                <div class="alert alert-info">
+                        <strong>EVENEMENTS PROCHES </strong> 
+                        <div>
+                                <ul id="events_closetoday">
+                                    <!-- <li></li> -->
+                               </ul>
+                           </div>   
+                </div>
+        </div>
+
+        
+
+        <div id="eventsold">
+                <div id="container_eventsold" class="btn-group" role="group" >
+                    <div id="buttoneventsold"><button id="showoldevents" type="button" class="btn btn-warning">Liste Evénements Termimés</button> </div>
+                           <div id="eventstodelete">
+                                <ul id="events_old">
+                                
+                                    <!-- <li></li> -->
+                                    
+                                </ul>
+                                <button id="deletealloldevents" type="button" class="btn btn-danger">Tout Supprimer</button>
+                            </div>        
+                </div>         
+            </div>
+
+    </div> <!-- end container_form_events -->
+
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <script src="js/jquery-ui/jquery-ui.min.js"></script>
+    <script src="js/class/Event.js"></script>
+    <script src="js/class/App.js"></script>
+    <script src="js/main.js"></script>
+    
+</body>
+</html>                                                             
