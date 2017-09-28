@@ -46,8 +46,8 @@ class UserRepository extends Repository {
         $query = "INSERT INTO user SET username=:username, Upassword=:Upassword";
         $prep = $this->connection->prepare( $query );
         $prep->execute( [
-            "title" => $user->getUsername(),
-            "content" => $user->getUpassword()
+            "username" => $user->getUsername(),
+            "upassword" => $user->getUpassword()
         ] );
         return $this->connection->lastInsertId();
 

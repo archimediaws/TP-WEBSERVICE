@@ -43,11 +43,14 @@ class EventRepository extends Repository {
 
     private function insert( Event $event ){
 
-        $query = "INSERT INTO event SET title=:title, content=:content";
+        $query = "INSERT INTO event SET title=:title, content=:content, date_event_start=:date_event_start, date_event_end=:date_event_end, userId=:userId  ";
         $prep = $this->connection->prepare( $query );
         $prep->execute( [
             "title" => $event->getTitle(),
-            "content" => $event->getContent()
+            "content" => $event->getContent(),
+            "date_event_start" => $event->getDate_event_start(),
+            "date_event_end" => $event->getDate_event_end(),
+            "userId" => $event->getUserId()
         ] );
         return $this->connection->lastInsertId();
 
@@ -55,11 +58,13 @@ class EventRepository extends Repository {
 
     private function update( Event $event ){
 
-        $query = "UPDATE event SET title=:title, content=:content WHERE id=:id";
+        $query = "UPDATE event SET title=:title, content=:content, date_event_start=:date_event_start, date_event_end=:date_event_end WHERE id=:id";
         $prep = $this->connection->prepare( $query );
         $prep->execute( [
             "title" => $event->getTitle(),
             "content" => $event->getContent(),
+            "date_event_start" => $event->getDate_event_start(),
+            "date_event_end" => $event->getDate_event_end(),
             "id" => $event->getId()
         ] );
         return $prep->rowCount();
