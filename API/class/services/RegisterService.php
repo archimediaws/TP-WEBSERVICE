@@ -1,5 +1,5 @@
 <?php
-class RegisterService extends Repository
+class RegisterService extends Service
 {
     private $params;
     private $error;
@@ -74,9 +74,9 @@ class RegisterService extends Repository
             $user = $prep->fetchAll(PDO::FETCH_ASSOC);
             if(empty($user)){
                         
-                        $password = $this->params['Upassword'];
+                        $Upassword = $this->params['Upassword'];
                         
-                        $objet = $connection->prepare('INSERT INTO user SET 
+                        $objet = $this->connection->prepare('INSERT INTO user SET 
                             username=:username,
                             Upassword=:Upassword
                             ');

@@ -241,8 +241,9 @@ Flight::route("POST /user/register", function(){ // route login user en objet PH
     
         unset($_SESSION['erreur']);
 
-        $service = new RegisterService();
-        $service->setParams(Flight::request()->data->getData());
+        $param = Flight::request()->data->getData();
+        // $service->setParams(Flight::request()->data);
+        $service = new RegisterService($param);
         $service->launchControls();
 
         $status = [
@@ -254,18 +255,16 @@ Flight::route("POST /user/register", function(){ // route login user en objet PH
 
         if($service->getError()){
             $_SESSION['erreur']=$service->getError();
-            // Flight::redirect('/');
+            
             $status["success"] = false;
-            $status["error"] = "il y a des erreurs dans formulaire enregistrement";
+            $status["error"] = "il y a des erreurs dans le formulaire d'enregistrement";
         }
         else
         {
 
+        $username = $service->getParams()['username'];
+        $Upassword = $service->getParams()['Upassword'];
 
-        $username = Flight::request()->data['username'];
-        $Upassword = Flight::request()->data['Upassword'];
-
-        
         $user = new User();
         $user->setUsername ($username);
         $user->setUpassword ($Upassword);

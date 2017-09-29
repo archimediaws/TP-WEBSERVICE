@@ -1,5 +1,5 @@
 <?php
-class LoginService
+class LoginService extends Service
 {
     private $params;
     private $error;

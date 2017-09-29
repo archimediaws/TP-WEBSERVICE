@@ -4,7 +4,8 @@ function myautoload( $classname ){
     $folders = [
         "class/",
         "class/models/",
-        "class/repositories/"
+        "class/repositories/",
+        "class/services/",
     ];
 
     foreach( $folders as $folder ){
