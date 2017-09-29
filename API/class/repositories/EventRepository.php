@@ -32,6 +32,28 @@ class EventRepository extends Repository {
         
     }
 
+
+
+    // public function getAllEventByUserId(User $user){
+
+    //     // recupérer l'id du user en cours
+    //     $userId = $user->getId(); 
+        
+    //     $object = $this->connection->prepare('SELECT * FROM event WHERE userId=:userId');
+    //     $object->execute(array(
+    //         'userId'=> $userId
+    //     ));
+    //     $eventSuser = $object->fetchAll(PDO::FETCH_ASSOC);
+    //     $arrayObjet = [];
+    //     foreach ($eventSuser as $eventuser){
+    //         $arrayObjet[] = new Event($eventuser);
+    //     }
+
+    //     return $arrayObjet;
+    // }
+
+
+
     function save( Event $event ){
         if( empty( $event->getId() ) ){
             return $this->insert( $event );

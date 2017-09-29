@@ -62,6 +62,7 @@ class RegisterService extends Service
             return $this->user;
         }
         }
+        
         public function checkAll(){
             $username = $this->params['username'];
 

@@ -51,7 +51,7 @@ class LoginService extends Service
         }
         else
         { 
-            $_SESSION['user'] = $this->user;
+            
             return $this->user;
         }
         }

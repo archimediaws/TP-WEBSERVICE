@@ -4,7 +4,7 @@ header("Access-Control-Allow-Origin:*", false);
 
 require "flight/Flight.php"; 
 require "autoload.php";
-session_start();
+
 //Enregistrer en global dans Flight le BddManager
 Flight::set("BddManager", new BddManager());
 
@@ -27,7 +27,7 @@ Flight::route("GET /event/@id", function( $id ){
     
     $status = [
         "success" => false,
-        "note" => false
+        "event" => false
     ];
 
     $event = new Event();
@@ -39,12 +39,14 @@ Flight::route("GET /event/@id", function( $id ){
 
     if( $event != false ){
         $status["success"] = true;
-        $status["note"] = $event;
+        $status["event"] = $event;
     }
 
     echo json_encode( $status );
 
 });
+
+
 
 //Créer un event
 Flight::route("POST /event", function(){
@@ -235,14 +237,13 @@ Flight::route("POST /user/login", function(){ // route login user en objet PHP
     
     });
 
-    // REGISTER
+    // REGISTER utilise le registerservice
 
-Flight::route("POST /user/register", function(){ // route login user en objet PHP 
+Flight::route("POST /user/register", function(){ 
     
-        unset($_SESSION['erreur']);
+       
 
         $param = Flight::request()->data->getData();
-        // $service->setParams(Flight::request()->data);
         $service = new RegisterService($param);
         $service->launchControls();
 
@@ -254,8 +255,7 @@ Flight::route("POST /user/register", function(){ // route login user en objet PH
 
 
         if($service->getError()){
-            $_SESSION['erreur']=$service->getError();
-            
+        
             $status["success"] = false;
             $status["error"] = "il y a des erreurs dans le formulaire d'enregistrement";
         }
@@ -286,10 +286,31 @@ Flight::route("POST /user/register", function(){ // route login user en objet PH
 
 
 
-    Flight::route('/deconnexion', function(){
-		unset( $_SESSION['user'] );
-		session_destroy();
-	
-	});
+    //Récuperer les events de l'userId @Id
+
+    Flight::route("GET /eventsByUser/@id", function( $id ){
+        
+        $status = [
+            "success" => false,
+            "events" => false
+        ];
+
+        $user = new User();
+        $user->setId( $id );
+
+        $bddManager = Flight::get("BddManager");
+        $repoUser = $bddManager->getUserRepository();
+        $events = $repoUser->getAllEventByUserId($user);
+
+        if( $events != false ){
+            $status["success"] = true;
+            $status["events"] = $events;
+        }
+
+        echo json_encode( $status );
+
+    });
+
+    
 
 Flight::start();
