@@ -56,9 +56,9 @@ class NewEventService extends Service
             $this->error['date_fin'] = 'Vous n\'avez pas renseigné la date de fin de votre evenement';
         }
 
-        // if(empty($this->params['categorie'])){
-        //     $this->error['categorie'] = 'Vous n\'avez pas decrit votre categorie ';
-        // }
+        if(empty($this->params['categorie'])){
+            $this->error['categorie'] = 'Vous n\'avez pas selectonné votre categorie ';
+        }
            
         if(empty($this->error) == false)
         {
@@ -80,7 +80,7 @@ class NewEventService extends Service
                             content=:content,
                             date_event_start=:date_event_start,
                             date_event_end=:date_event_end
-                            -- category_id=:categorie
+                            catId=:catId
                            
                             ');
                         $objet->execute(array(
@@ -88,9 +88,9 @@ class NewEventService extends Service
                             'title' =>$this->params['title'],
                             'content'=>$this->params['description'],
                             'date_event_start'=>$this->params['date_debut'],
-                            'date_event_end'=>$this->params['date_fin']
+                            'date_event_end'=>$this->params['date_fin'],
                             // 'date_post'=>$date,
-                            // 'categorie'=>$this->params['categorie']                
+                            'catId'=>$this->params['categorie']                
                         ));
                         $event = true;
                 return $event;

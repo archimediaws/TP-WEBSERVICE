@@ -9,6 +9,133 @@ require "autoload.php";
 Flight::set("BddManager", new BddManager());
 
 
+
+// routes CATEGORIES
+
+
+//CATEGORIES GET ALL Lire tous les categories
+Flight::route("GET /categories", function(){
+    
+        $bddManager = Flight::get("BddManager");
+        $repoCat = $bddManager->getCategorieRepository();
+        $categories = $repoCat->getAllCategories();
+    
+        echo json_encode ( $categories );
+    
+    });
+
+
+//CATEGORIES GET CATEGORIE par id
+Flight::route("GET /categorie/@id", function( $id ){
+    
+    $status = [
+        "success" => false,
+        "catId" => false
+    ];
+
+    $categorie = new Categorie();
+    $categorie->setId( $id );
+
+    $bddManager = Flight::get("BddManager");
+    $repoCat = $bddManager->getCategorieRepository();
+    $categorie = $repoCat->getCategoryById( $categorie );
+
+    if( $categorie != false ){
+        $status["success"] = true;
+        $status["catId"] = $categorie;
+    }
+
+    echo json_encode( $status );
+
+});
+
+
+// CATEGORIE POST  / Créer une categorie
+Flight::route("POST /categorie", function(){
+    
+        $title = Flight::request()->data["title"];
+        $userId = Flight::request()->data["userId"];
+        
+    
+        $status = [
+            "success" => false,
+            "userId" => 0
+        ];
+    
+        if( strlen( $title ) > 0  && strlen( $userId ) > 0 ) {
+    
+            $categorie = new Categorie();
+            
+            $categorie->setTitle( $title );
+            $categorie->setUserId( $userId );
+            
+    
+            $bddManager = Flight::get("BddManager");
+            $repoCat = $bddManager->getCategorieRepository();
+            $id = $repoCat->save( $categorie );
+    
+            if( $id != 0 ){
+                $status["success"] = true;
+                $status["userId"] = $id;
+            }
+    
+        }
+    
+        echo json_encode( $status ); 
+        
+    });
+
+
+// CATEGORIE DELETE / Supprimer la categorie à l'@id
+Flight::route("DELETE /categorie/@id", function( $id ){
+    
+        $status = [
+            "success" => false
+        ];
+    
+        $categorie = new Categorie();
+        $categorie->setId( $id );
+    
+        $bddManager = Flight::get("BddManager");
+        $repoCat = $bddManager->getCategorieRepository();
+        $rowCount = $repoCat->delete( $categorie );
+    
+        if( $rowCount == 1 ){
+            $status["success"] = true;
+        }
+    
+        echo json_encode( $status );
+        
+    });  
+
+
+    //CATEGORIE GET EVENTS / Récupere les events de la categorie @id
+
+    Flight::route("GET /eventsByCategorie/@id", function( $id ){
+        
+        $status = [
+            "success" => false,
+            "events" => false
+        ];
+
+        $categorie = new Categorie();
+        $categorie->setId( $id );
+
+        $bddManager = Flight::get("BddManager");
+        $repoCat = $bddManager->getCategorieRepository();
+        $events = $repoCat->getAllEventByCategorieId($categorie);
+
+        if( $events != false ){
+            $status["success"] = true;
+            $status["events"] = $events;
+        }
+
+        echo json_encode( $status );
+
+    });
+
+
+
 // routes EVENT
 
 //EVENT GET EVENTS Lire tous les events
@@ -56,13 +183,14 @@ Flight::route("POST /event", function(){
     $date_event_start = Flight::request()->data["date_event_start"];
     $date_event_end = Flight::request()->data["date_event_end"];
     $userId = Flight::request()->data["userId"];
+    $catId = Flight::request()->data["catId"];
 
     $status = [
         "success" => false,
         "id" => 0
     ];
 
-    if( strlen( $title ) > 0 && strlen( $content ) > 0 && strlen( $date_event_start ) > 0 && strlen( $date_event_end ) > 0  && strlen( $userId ) > 0 ) {
+    if( strlen( $title ) > 0 && strlen( $content ) > 0 && strlen( $date_event_start ) > 0 && strlen( $date_event_end ) > 0  && strlen( $userId ) > 0 && strlen( $catId ) > 0 ) {
 
         $event = new Event();
         
@@ -71,6 +199,7 @@ Flight::route("POST /event", function(){
         $event->setDate_event_start( $date_event_start );
         $event->setDate_event_end( $date_event_end );
         $event->setUserId( $userId );
+        $event->setCatId( $catId );
 
         $bddManager = Flight::get("BddManager");
         $repo = $bddManager->getEventRepository();

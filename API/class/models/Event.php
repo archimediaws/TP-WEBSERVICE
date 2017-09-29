@@ -6,6 +6,7 @@ class Event extends Model implements JsonSerializable {
     private $date_event_start;
     private $date_event_end;
     private $userId;
+    private $catId;
 
     // GETTER
 
@@ -28,7 +29,10 @@ class Event extends Model implements JsonSerializable {
     function getUserId(){
         return $this->userId;
     }
-    
+
+    function getCatId(){
+        return $this->catId;
+    }
     // SETTER
 
     function setTitle( $title ){
@@ -52,6 +56,10 @@ class Event extends Model implements JsonSerializable {
         $this->userId = $userId;
     }
 
+    function setCatId( $catId){
+        $this->catId = $catId;
+    }
+
     // JSON SERIALIZE 
 
     function jsonSerialize(){
@@ -61,7 +69,8 @@ class Event extends Model implements JsonSerializable {
             "content" => $this->content,
             "date_event_start" => $this->date_event_start,
             "date_event_end" => $this->date_event_end,
-            "userId" => $this->userId
+            "userId" => $this->userId,
+            "catId" => $this->catId
         ];
     }
 

@@ -34,25 +34,6 @@ class EventRepository extends Repository {
 
 
 
-    // public function getAllEventByUserId(User $user){
-
-    //     // recupérer l'id du user en cours
-    //     $userId = $user->getId(); 
-        
-    //     $object = $this->connection->prepare('SELECT * FROM event WHERE userId=:userId');
-    //     $object->execute(array(
-    //         'userId'=> $userId
-    //     ));
-    //     $eventSuser = $object->fetchAll(PDO::FETCH_ASSOC);
-    //     $arrayObjet = [];
-    //     foreach ($eventSuser as $eventuser){
-    //         $arrayObjet[] = new Event($eventuser);
-    //     }
-
-    //     return $arrayObjet;
-    // }
-
-
 
     function save( Event $event ){
         if( empty( $event->getId() ) ){
@@ -65,14 +46,15 @@ class EventRepository extends Repository {
 
     private function insert( Event $event ){
 
-        $query = "INSERT INTO event SET title=:title, content=:content, date_event_start=:date_event_start, date_event_end=:date_event_end, userId=:userId  ";
+        $query = "INSERT INTO event SET title=:title, content=:content, date_event_start=:date_event_start, date_event_end=:date_event_end, userId=:userId, catId=:catId  ";
         $prep = $this->connection->prepare( $query );
         $prep->execute( [
             "title" => $event->getTitle(),
             "content" => $event->getContent(),
             "date_event_start" => $event->getDate_event_start(),
             "date_event_end" => $event->getDate_event_end(),
-            "userId" => $event->getUserId()
+            "userId" => $event->getUserId(),
+            "catId" => $event->getCatId()
         ] );
         return $this->connection->lastInsertId();
 
