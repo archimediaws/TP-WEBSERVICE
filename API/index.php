@@ -11,7 +11,7 @@ Flight::set("BddManager", new BddManager());
 
 // routes EVENT
 
-//Lire toutes les events
+//EVENT GET EVENTS Lire tous les events
 Flight::route("GET /events", function(){
 
     $bddManager = Flight::get("BddManager");
@@ -22,7 +22,7 @@ Flight::route("GET /events", function(){
 
 });
 
-//Récuperer l'event @id
+//EVENT GET EVENT Récuperer l'event @id
 Flight::route("GET /event/@id", function( $id ){
     
     $status = [
@@ -48,7 +48,7 @@ Flight::route("GET /event/@id", function( $id ){
 
 
 
-//Créer un event
+// EVENT POST EVENT / Créer un event
 Flight::route("POST /event", function(){
 
     $title = Flight::request()->data["title"];
@@ -87,7 +87,7 @@ Flight::route("POST /event", function(){
     
 });
 
-// updater = modifier les datas d'un event  = en POST 
+// EVENT POST updater = modifier les datas d'un event  = en POST 
 
 Flight::route("POST /event/@id", function($id){
     
@@ -100,7 +100,7 @@ Flight::route("POST /event/@id", function($id){
 
         $status = [
             "success" => false,
-            // "id" => 0
+        
         ];
     
         if( strlen( $title ) > 0 && strlen( $content ) > 0 && strlen( $date_event_start ) > 0 && strlen( $date_event_end ) > 0  && strlen( $userId ) > 0 ) {
@@ -130,11 +130,11 @@ Flight::route("POST /event/@id", function($id){
     });
 
 
-// updater = modifier les datas d'un event  = en PUT 
+// EVENT PUT updater = modifier les datas d'un event  = en PUT 
 Flight::route("PUT /event/@id", function( $id ){
     
-        //Pour récuperer des données PUT -> les données sont encodé en json string
-        //avec ajax, puis décodé ici en php
+        //Pour récuperer des données PUT -> les données sont encodées en json string
+        //avec ajax, puis décodées ici en php
         $json = Flight::request()->getBody();
         $_PUT = json_decode( $json , true);//true pour tableau associatif
     
@@ -172,7 +172,7 @@ Flight::route("PUT /event/@id", function( $id ){
     
     });
 
-//Supprimer l'event à l'@id
+// EVENT DELETE / Supprimer l'event à l'@id
 Flight::route("DELETE /event/@id", function( $id ){
 
     $status = [
@@ -197,7 +197,7 @@ Flight::route("DELETE /event/@id", function( $id ){
 
 // ROUTES USER
 
-// LOGIN 
+// USER LOGIN 
 
 Flight::route("POST /user/login", function(){ // route login user en objet PHP 
     
@@ -239,7 +239,7 @@ Flight::route("POST /user/login", function(){ // route login user en objet PHP
     
     });
 
-    // REGISTER utilise le registerservice
+    // USER REGISTER utilise le registerservice
 
 Flight::route("POST /user/register", function(){ 
     
@@ -288,7 +288,7 @@ Flight::route("POST /user/register", function(){
 
 
 
-    //Récuperer les events de l'userId @Id
+    //USER GET EVENTS / Récupere les events de l'userId @id
 
     Flight::route("GET /eventsByUser/@id", function( $id ){
         
