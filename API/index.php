@@ -13,7 +13,7 @@ Flight::set("BddManager", new BddManager());
 // routes CATEGORIES
 
 
-//CATEGORIES GET ALL Lire tous les categories
+//CATEGORIES GET ALL Lire toutes les categories
 Flight::route("GET /categories", function(){
     
         $bddManager = Flight::get("BddManager");
@@ -411,10 +411,9 @@ Flight::route("POST /user/register", function(){
         }
     
     
-        echo json_encode($status); // tranforme une variable en JSON
+        echo json_encode($status); 
     
     });
-
 
 
     //USER GET EVENTS / Récupere les events de l'userId @id
