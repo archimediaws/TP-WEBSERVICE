@@ -22,13 +22,13 @@ body {
      .main-calendar { background: #f8f9fa; padding: 10px; }
      .clr{clear:both; font-size:0; height:0;}
      .date-area{background:#07cb79; color:#fff; margin-bottom:22px; padding:35px 20px; text-align:center; text-transform:uppercase; font-family:Arial, Helvetica, sans-serif;}
-     .date-area > .day, .date-area > .month{font-size:18px; line-height:100px; vertical-align:top; width:33.3333%; float:left; text-align:center;}
+     .date-area > .day, .date-area > .month{font-size:16px; line-height:100px; vertical-align:top; width:33.3333%; float:left; text-align:center;}
      .date-area > .date{background:#ffffff; font-size:80px; color:#07cb79; min-height:100px; font-weight:600; line-height:100px; width:33.3333%; float:left; text-align:center;}
      .dateinfo .block{font-family:Arial, Helvetica, sans-serif; color:#999999; font-size:16px; line-height:25px; margin:20px 0;}
      .dateinfo .block > span{width:25px; height:25px; display:inline-block; background:#000000; border-radius:3px; margin-right:10px; vertical-align:top;}
      .dateinfo .block > .today{background-color:#07cb79;}
-     .dateinfo .block > .event-cal{background-color:#c6c6c6;}
-     table.ui-datepicker-calendar tbody td.highlight  a {   background: #c6c6c6;   color: #ffffff; }
+     .dateinfo .block > .event-cal{background-color:#E2AAAA;}
+     table.ui-datepicker-calendar tbody td.highlight  a {   background: #CA3939;   color: #ffffff; }
      .dateinfo .block > .available{background-color:#ffffff;}
      .ui-datepicker-today{background-color:#07cb79;}
      .ui-datepicker-today .ui-state-highlight{background-color:#c6c6c6; border-color:#c6c6c6; background-image:none; color:#ffffff;}
@@ -38,6 +38,7 @@ body {
       
      //*ui-datepicker*//
      .ui-widget-content { background: transparent; border: none; border-radius: 0px; }
+     button.ui-datepicker-current.ui-state-default.ui-priority-secondary.ui-corner-all{background-color:#07cb79; color:black; }
      .ui-datepicker { width: 100%; }
      .ui-datepicker td { padding: 0px; }
      .ui-datepicker td span, .ui-datepicker td a { padding: 0.5em; text-align: center; background: transparent; font-size: 18px; font-weight: bold; }
@@ -45,16 +46,18 @@ body {
      .ui-widget-header { background: transparent; border: 0px; }
      .ui-datepicker .ui-datepicker-title { padding: 0em 1em 2em; }
      .ui-datepicker th { padding: 1em 1em 2em; text-transform: uppercase; }
-     .ui-datepicker .ui-datepicker-next:before { content: "\f101"; width: 20px; height: 20px; margin-top: 0; position: absolute; top: 0%; right: 20px; font-family: 'FontAwesome';
-       speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; font-size: 20px; line-height: 20px; text-align: center; color: #2f3742;
-        }
-     .ui-datepicker .ui-datepicker-prev:before { content: "\f100"; width: 20px; height: 20px; margin-top: 0; position: absolute; top: 0%; right: 20px; font-family: 'FontAwesome';
-       speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; font-size: 20px; line-height: 20px; text-align: center; color: #2f3742;
-        }
+    //  .ui-datepicker .ui-datepicker-next:before { content: "\f101"; width: 20px; height: 20px; margin-top: 0; position: absolute; top: 0%; right: 20px; font-family: 'FontAwesome';
+    //    speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; font-size: 20px; line-height: 20px; text-align: center; color: #2f3742;
+    //     }
+    //  .ui-datepicker .ui-datepicker-prev:before { content: "\f100"; width: 20px; height: 20px; margin-top: 0; position: absolute; top: 0%; right: 20px; font-family: 'FontAwesome';
+    //    speak: none; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; font-size: 20px; line-height: 20px; text-align: center; color: #2f3742;
+    //     }
      .ui-datepicker .ui-datepicker-prev { left: 26px; }
      .ui-datepicker .ui-datepicker-next { right: 2px; }
      .ui-datepicker .ui-datepicker-title { line-height: 0.8em; }
-
+     .ui-state-default a{background-color: $fondfuchia;}
+     .ui-state-default.ui-state-active{background-color: $fondfuchia;}
+    
 
 } // fin calendrier
 

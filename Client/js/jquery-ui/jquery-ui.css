@@ -317,7 +317,7 @@ html .ui-button.ui-state-disabled:active {
 	border: 1px solid #c5c5c5;
 	background: #DDD1D1;
 	font-weight: normal;
-	color: #454545;
+	color:#0F0F0F;
 }
 .ui-state-default a,
 .ui-state-default a:link,
