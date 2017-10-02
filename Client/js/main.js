@@ -3,6 +3,23 @@ app.initPickersEvents(); // init du datepicker form events
 app.initPickersCalendar(); // init le datepicker calendar
 app.reinit(); // init des hide() slideup() et val() des events dans le formulaire
 
+
+/// GESTION USER
+
+
+//BTN CONNEXION
+app.$addlogin.click(function(){
+    app.$form_login.slideToggle(200);
+});
+
+//BTN INSCRIPTION
+app.$addsignup.click(function(){
+    app.$form_signup.slideToggle(200);
+});
+
+
+
+
 ////////// formulaire ajouter event et gestion des alerts  ///////////////
 
 // BTN ADD EVENT
@@ -16,8 +33,8 @@ app.$form_event.submit(function(event){
     event.preventDefault(); //Empeche le rechargement
     var name = app.$event.val();// recupere la valeur du champ titre
     var description = app.$description.val();// recupere la valeur du champ description
-    var datestartevent = app.$date_start_event.val();// recupere la valeur du champ description
-    var dateendevent = app.$date_end_event.val();// recupere la valeur du champ description
+    var datestartevent = app.$date_start_event.datepicker("getDate");// recupere la valeur du champ description au format datepicker = un objet
+    var dateendevent = app.$date_end_event.datepicker("getDate");// recupere la valeur du champ description objet Date du datepicker
 
     var today = new Date();
 
@@ -42,6 +59,12 @@ app.$showoldevents.click(function(){
     app.$eventstodelete.slideToggle(200);
     });
 
+
+//CATEGORIE
+// BTN ADD CATEGORIE
+app.$addcat.click(function(){
+    app.$form_categorie.slideToggle(200);
+});
 
 ////////// affichage et gestion des events  ///////////////
 

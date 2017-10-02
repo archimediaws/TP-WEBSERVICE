@@ -2,7 +2,22 @@ class App {
     
         constructor (){
 
+            // login
+            this.$form_login = $("#login_form");//formulaire
+            this.$usernamelogin = $("#usernamelogin"); // champ texte
+            this.$passewordlogin = $("#passewordlogin");
 
+            this.$addlogin = $("#addlogin"); //btn
+
+            //signup
+            this.$form_signup = $("#signup_form");//formulaire
+            this.$usernamesignup = $("#usernamesignup"); 
+            this.$passewordsignup = $("#passewordsignup");
+
+            this.$addsignup = $("#addsignup"); //btn
+
+
+            //event en cours
             this.currentEvent = null; // permet de stocker l'event en cours d'edition
 
             // formulaire ajout des events 
@@ -11,9 +26,16 @@ class App {
             this.$description = $("#description");
             this.$date_start_event = $("#date_start");
             this.$date_end_event = $("#date_end");
-            // this.$date_start_3 = $("#date_start_3");
+            
             this.$add = $("#add"); // bouton ajouter form event
 
+             // formulaire ajout des categories
+             this.$form_categorie = $("#add_categorie");//formulaire
+             this.$titlecategorie = $("#titlecategorie"); // champ titre
+            
+             this.$addcat = $("#addcat"); // bouton ajouter form categorie
+
+            
             // fenetre information & description de l'event
             this.$infos= $("#eventinfos");
             this.$titre = $("#container_eventinfos h2");
@@ -28,7 +50,6 @@ class App {
             this.$alertClosetoday = $('#alert .alert-info');
 
             //affiche olds events
-            
             this.$showoldevents = $('#showoldevents');
             this.$eventstodelete = $('#eventstodelete');
             this.$events_old = $("#events_old");
@@ -45,8 +66,8 @@ class App {
             this.todayplus1days.setDate(this.today.getDate()+1);
             this.todayplus2days = new Date(); // JS recup la date du jour = un objet -> var du jour+2
             this.todayplus2days.setDate(this.today.getDate()+2);
-            this.todayplus3days = new Date(); // JS recup la date du jour = un objet -> var du jour-3
-            this.todayplus3days.setDate(this.today.getDate()+3);  // set dans objet var du jour-3 la date du jour avec objet var du jour getDate()-3
+            this.todayplus3days = new Date(); // JS recup la date du jour = un objet -> var du jour+3
+            this.todayplus3days.setDate(this.today.getDate()+3);  
 
 
             this.events = []; // tableau objets events
@@ -74,11 +95,19 @@ class App {
 
             this.displayEvents(); // afiche les events
 
-            this.reinit(); //initialise valeur event + hide form et infos event
+            this.reinit(); //initialise valeur event + hide form et infos event + categorie
 
         }
 
         reinit(){
+            this.$form_login.hide();
+            this.$form_login.slideUp(300);
+            this.$usernamelogin.val("");
+            this.$passewordlogin.val("");
+            this.$form_signup.hide();
+            this.$form_signup.slideUp(300);
+            this.$usernamesignup.val("");
+            this.$passewordsignup.val("");
             this.$form_event.hide();
             this.$form_event.slideUp(300);
             this.$event.val("");
@@ -86,7 +115,10 @@ class App {
             this.$date_start_event.val("");
             this.$date_end_event.val("");
             this.$infos.hide();
-            this.$infos.slideUp(300);  
+            this.$infos.slideUp(300); 
+            this.$form_categorie.hide();
+            this.$form_categorie.slideUp(300);
+            this.$titlecategorie.val("");
             
         }
 
@@ -114,7 +146,8 @@ class App {
             }
 
             for(var eventObject of events){
-                var event = new Event ( eventObject.name, eventObject.description, eventObject.datestartevent, eventObject.dateendevent );
+
+                var event = new Event ( eventObject.name, eventObject.description, new Date(eventObject.datestartevent), new Date(eventObject.dateendevent) );
 
                 this.addEvent( event );
             }
@@ -184,11 +217,11 @@ class App {
 
             setAlertToday(){
                 
-               var aujourdhui = this.today.toLocaleDateString();
+               var datedujour = this.today.getDate();
                this.eventsOftheday =[]; // vide le tableau des alertes avant chaque set
             
                         for(var eventa of this.events){ // pour chaque date de debut d'event = a la date d'aujourdhui
-                            if( eventa.datestartevent == aujourdhui ){
+                            if( eventa.datestartevent.getDate() == datedujour ){
                                this.addAlertToday(eventa);
                                
                             }
@@ -209,7 +242,7 @@ class App {
                     html += "<li>";
                     html += "<span>" + eventOftheday.name+ "</span><br>";
                     html += "<span>" + eventOftheday.description+ "</span><br>";
-                    html += "<span> fin : " + eventOftheday.dateendevent+ "</span><br>";
+                    html += "<span> fin : " + eventOftheday.dateendevent.toLocaleDateString()+ "</span><br>";
                     html += "<hr>";
                     html += "</li>";
                 }
@@ -223,23 +256,18 @@ class App {
             ////  GESTION DES ALERTES PROCHE JOUR ///
 
             setAlertCloseToday(){
-                
-               var aujourdhuiplus1 = this.todayplus1days.toLocaleDateString();
-               var aujourdhuiplus2 = this.todayplus2days.toLocaleDateString();
-               var aujourdhuiplus3 = this.todayplus3days.toLocaleDateString();
+                var aujourdhui = this.today.getTime();
+                var aujourdhuiplus1 = this.today.getTime()+1*(24*60*60*1000);
+                var aujourdhuiplus2 = this.today.getTime()+2*(24*60*60*1000);
+                var aujourdhuiplus3 = this.today.getTime()+3*(24*60*60*1000);
 
                this.eventsCloseOftheday =[]; // vide le tableau des alertesCloseToday avant chaque set
             
                         for(var eventac of this.events){ // pour chaque date de debut d'event = a la date d'aujourdhuiplus3 jours
-                            if( eventac.datestartevent == aujourdhuiplus1){
+                            if( aujourdhui <= eventac.datestartevent.getTime() &&  eventac.datestartevent.getTime() <= aujourdhuiplus3){
                                this.addAlertCloseToday(eventac);  
                             }
-                            else if(eventac.datestartevent == aujourdhuiplus2){
-                                this.addAlertCloseToday(eventac);
-                            }
-                            else if(eventac.datestartevent == aujourdhuiplus3){
-                                this.addAlertCloseToday(eventac);
-                            }
+                            
                         }
                     
             }
@@ -257,7 +285,7 @@ class App {
                     html += "<li>";
                     html += "<span>" + eventCloseOftheday.name+ "</span><br>";
                     html += "<span>" + eventCloseOftheday.description+ "</span><br>";
-                    html += "<span> debut : " + eventCloseOftheday.datestartevent+ "</span><br>";
+                    html += "<span> debut : " + eventCloseOftheday.datestartevent.toLocaleDateString()+ "</span><br>";
                     html += "<hr>";
                     html += "</li>";
                 }
@@ -271,15 +299,13 @@ class App {
 
             setOldEventsToShow(){
                 
-            //    var aujourdhui = this.today.toLocaleDateString();
-               var aujourdhui = this.today.getDate();
-            //    var currentDate = this.$date_end_event.datepicker( "setDate","" );
-               
-
+               var aujourdhui = this.today.getTime()-1*(24*60*60*1000);;
+            
                this.eventsOldToShow =[]; // vide le tableau des eventsOlToShow avant chaque set
             
-                        for(var eventos of this.events){ // pour chaque date de fin d'event < a la date d'aujourdhui
-                            if( eventos.dateendevent < aujourdhui ){
+                        for(var eventos of this.events){ // pour chaque date de fin d'event < a la date d'aujourdhui getTime = timesramp
+                            
+                            if(   aujourdhui > eventos.dateendevent.getTime() ){
                                this.addOldEventsToShow(eventos);
                                
                             }
@@ -300,7 +326,7 @@ class App {
                     html += "<li>";
                     html += "<span>" + eventOldToShow.name+ "</span>";
                     html += "<span>" + eventOldToShow.description+ "</span>";
-                    html += "<span> terminé le : " + eventOldToShow.dateendevent+ "</span><br>";
+                    html += "<span> terminé le : " + eventOldToShow.dateendevent.toLocaleDateString() + "</span><br>";
                     html += "<hr>";
                     html += "</li>";
                 }
@@ -325,9 +351,7 @@ class App {
 
                 var aujourdhui = this.today.toLocaleDateString();
                 var dateendevent = this.$date_end_event;
-                console.log(dateendevent);
-                // that = this; //On sauvegarde le contexte "this" dans une variable
-
+                
                 this.eventsOldToShow =[]; // vide le tableau des eventsOlToShow avant 
                 var tableauKey = [];
                 //remove sur tableau events
@@ -372,22 +396,19 @@ class App {
                 dayNamesShort: ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'],
                 dayNamesMin: ['Di','Lu','Ma','Me','Je','Ve','Sa'],
                 weekHeader: 'Sm',
-                dateFormat: 'dd-mm-yy',
+                dateFormat: 'dd/mm/yy',
                 firstDay: 1,
                 isRTL: false,
                 showMonthAfterYear: false,
                 yearSuffix: '',
-                // minDate: 0,
                 maxDate: '+12M +0D',
-                minDate: new Date (2016, 8, 1), 
+                // minDate: new Date (2016, 8, 1), 
                 
                 beforeShowDay: $.proxy(this.CalendarEventDay, this), // pour ne pas perdre le this en tant que mon app
-                // onSelect:
+                onSelect: $.proxy(this.onSelectDateCalendar, this),
                 numberOfMonths: 1,
                 showButtonPanel: true
 
-
-                
 
                     // onSelect: function(dateText) {
                     //     var date,
@@ -418,7 +439,7 @@ class App {
 
             displaydatecalendar(){
                 
-                                    // les noms de jours / mois
+                                // les noms de jours / mois
                                  var jours = new Array("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi");
                                  var mois = new Array("janvier", "fevrier", "mars", "avril", "mai", "juin", "juillet", "aout", "septembre", "octobre", "novembre", "decembre");
                                  
@@ -431,16 +452,14 @@ class App {
                
             CalendarEventDay(date){ 
                 
-                    
-
                         if(!this.events){ // s'il n y a pas d'event dans le LS alors on arrete la boucle
                         return [false, ""];
                         }
 
                         for(var key in this.events){ //  var "key" "in" tableau events
-                        var event = this.events[key]; // fait passer la "key" du tableau dans une variable eventold
+                        var event = this.events[key]; // fait passer la "key" du tableau dans une variable 
                         
-                        if( event.datestartevent  == date.toLocaleDateString() ){ 
+                        if( event.datestartevent.getTime()  == date.getTime() ){ 
 
                             return [true, ""];// on affiche le jour calandar
           
@@ -449,5 +468,18 @@ class App {
                     }
                     return [false, ""];//sinon, on cache le jour du calendar
                 }
+
+            onSelectDateCalendar(dateText){
+                var date;
+                var selectedDate = new Date(dateText);
+
+                if(!this.events){ // s'il n y a pas d'event dans le LS alors on arrete la boucle
+                return;
+                }
+                for ( var key in this.events){
+                    date = this.events[key].datestartevent;
+                }
+
+            }
             
     } //end APP

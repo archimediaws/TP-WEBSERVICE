@@ -11,41 +11,34 @@ class Event {
             // var standar
             this.today = new Date(); // JS recup la date du jour = un objet -> var du jour
 
-            this.todayplus1days = new Date(); // JS recup la date du jour = un objet -> var du jour+1
-            this.todayplus1days.setDate(this.today.getDate()+1);
-            this.todayplus2days = new Date(); // JS recup la date du jour = un objet -> var du jour+2
-            this.todayplus2days.setDate(this.today.getDate()+2);
-            this.todayplus3days = new Date(); // JS recup la date du jour = un objet -> var du jour+3
-            this.todayplus3days.setDate(this.today.getDate()+3);  // set dans objet var du jour-3 la date du jour avec objet var du jour getDate()-3
-            
-
+    
         }
     
         display(){
-
-            var aujourdhui = this.today.toLocaleDateString();//transforme numerique en string format date locale
-            var aujourdhuiplus1 = this.todayplus1days.toLocaleDateString();
-            var aujourdhuiplus2 = this.todayplus2days.toLocaleDateString();
-            var aujourdhuiplus3 = this.todayplus3days.toLocaleDateString();
-
+            
+            var aujourdhui = this.today.getTime();
+            
+            
+            var aujourdhuiplus1 = this.today.getTime()+1*(24*60*60*1000);
+            var aujourdhuiplus2 = this.today.getTime()+2*(24*60*60*1000);
+            var aujourdhuiplus3 = this.today.getTime()+3*(24*60*60*1000);
+           
             var datedujour = this.today.getDate();
             var date = new Date();
-
-        
             var datedujourplus1 = date.setDate(datedujour+1);
             var datedujourplus2 = date.setDate(datedujour+2);
-
+            var datedujourplus3 = date.setDate(datedujour+3);
             
         
             // si la date d'aujourd'hui = date de debut de levent -> vert
-            if(aujourdhui == this.datestartevent ){
+            if(datedujour == this.datestartevent.getDate() ){
 
                 var div = "<div class='event' style='background-color:#72C088;'>";
                 div += "<div class='closetoday'>X</div>";
                 div += "<h2>"+ this.name +"</h2>";
                 div += "<p>"+ this.description +"</p>";
-                div += "<p> debut :"+ this.datestartevent +"</p>";
-                div += "<p> fin :"+ this.dateendevent +"</p>";
+                div += "<p> debut :"+ this.datestartevent.toLocaleDateString() +"</p>";
+                div += "<p> fin :"+ this.dateendevent.toLocaleDateString() +"</p>";
                 div += "<di class='openeventinfos'> voir details </div>";
                 div += "</div>";
 
@@ -54,15 +47,15 @@ class Event {
 
             }
 
-            // si la date de fin de l'event supp à la date d'aujourd'hui -> orange
-            else if( this.dateendevent < datedujour ){
+            // si la date de fin de l'event inf à la date d'aujourd'hui -> orange
+            else if( this.dateendevent.getTime() < aujourdhui ){
                 
                  var div = "<div class='event' style='background-color:#EC971F'>";
                 div += "<div class='closeold'>X</div>";
                 div += "<h2>"+ this.name +"</h2>";
                 div += "<p>"+ this.description +"</p>";
-                div += "<p> debut :"+ this.datestartevent +"</p>";
-                div += "<p> fin :"+ this.dateendevent +"</p>";
+                div += "<p> debut :"+ this.datestartevent.toLocaleDateString() +"</p>";
+                div += "<p> fin :"+ this.dateendevent.toLocaleDateString() +"</p>";
                 // div += "<di class='openeventinfos'> voir details </div>";
                 div += "</div>";
                 
@@ -71,15 +64,15 @@ class Event {
             $("#container_events").append( this.$domoldevent ); // pour le rajouter au DOM
                 
             }
-            // si la date de debut de l'event moins 3 jours = la date d'aujourd'hui -> bleu
-            else if(aujourdhuiplus3 == this.datestartevent || aujourdhuiplus2 == this.datestartevent || aujourdhuiplus1 == this.datestartevent){
+            // si la date de debut de l'event + 3 jours = la date d'aujourd'hui -> bleu
+            else if(aujourdhui <= this.datestartevent.getTime() &&  this.datestartevent.getTime() <= aujourdhuiplus3 ) {
                 
                  var div = "<div class='event' style='background-color:#51789B;'>";
                 div += "<div class='closeto'>X</div>";
                 div += "<h2>"+ this.name +"</h2>";
                 div += "<p>"+ this.description +"</p>";
-                div += "<p> debut :"+ this.datestartevent +"</p>";
-                div += "<p> fin :"+ this.dateendevent +"</p>";
+                div += "<p> debut :"+ this.datestartevent.toLocaleDateString() +"</p>";
+                div += "<p> fin :"+ this.dateendevent.toLocaleDateString() +"</p>";
                 div += "<di class='openeventinfos'> voir details </div>";
                 div += "</div>";
                 
@@ -94,8 +87,8 @@ class Event {
             div += "<div class='close'>X</div>";
             div += "<h2>"+ this.name +"</h2>";
             div += "<p>"+ this.description +"</p>";
-            div += "<p> debut :"+ this.datestartevent +"</p>";
-            div += "<p> fin :"+ this.dateendevent +"</p>";
+            div += "<p> debut :"+ this.datestartevent.toLocaleDateString() +"</p>";
+            div += "<p> fin :"+ this.dateendevent.toLocaleDateString() +"</p>";
             // div += "<p>"+ aujourdhuiplus3 +"</p>";
             div += "<di class='openeventinfos'> voir details </div>";
             div += "</div>";

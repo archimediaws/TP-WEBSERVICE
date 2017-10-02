@@ -88,12 +88,82 @@
     </div> <!-- end container_events -->
 
 
-
-
     <div id="container_form_events">
         
+        <div class="user-header">
+            <p> NE PAS OUBLIER ...</p>
+            <div class="btn-group" role="group" aria-label="...">
+                <button type="button" id="addlogin"class="btn btn-success">Connexion</button>
+                <button type="button" id="addsignup"class="btn btn-default">Inscription</button>
+            </div>
+
+            <div class="btn-group" role="group" aria-label="...">
+                <a href="#deconnexion"><button type="button" class="btn btn-warning">Deconnexion</button></a>
+            </div>
+
+        </div>
+
+        <div class="user-login">
+            <p><strong>Se connecter</strong></p>
+            <p>identifiant & mot de passe</p>
+
+            <!-- alert error -->
+                <div class="alert alert-danger">
+                    <strong>Erreur: </strong> <!-- ici les alerts erreurs -->
+                </div>
+            
+            <!-- alert success -->
+                <div class="alert alert-success"><!-- ici les data user -->
+                    <strong>Bienvenue!</strong> 
+                </div>
+            <!-- login form -->
+
+            <form id="login_form">
+                <div class="form-groups">
+                    <label>Nom Utilisateur</label>
+                    <input id="usernamelogin"class="form-control" type="text" name="username" value=""/>
+                </div>
+                <div class="form-groups">
+                    <label>Mot de Passe</label>
+                    <input id="passwordlogin" class="form-control" type="password" name="Upassword" value="" />
+                </div>
+            
+                <button class="btn btn-primary" type="submit">Se connecter</button>
+            
+            </form>
+        </div>
+        <div class="user-signup">
+            <p><strong>Incription</strong></h2>
+            <p>Inscrivez-vous pour poster vos événements</p>
+
+            <!-- alert error -->
+                <div class="alert alert-danger">
+                    <strong>Erreur: </strong> <!-- ici les alerts erreurs -->
+                </div>
+            
+            <!-- alert success -->
+                <div class="alert alert-success"><!-- ici les data user -->
+                    <strong>Vous avez bien été enregistré!</strong> 
+                </div>
+
+            <!-- signup form -->
+            <form id="signup_form">
+                <div class="form-groups">
+                    <label>Nom utilisateur</label>
+                    <input id="usernamesignup" class="form-control" type="text" name="username" value="" />
+                </div>
+                <div class="form-groups">
+                    <label>Mot de Passe</label>
+                    <input id="passwordsignup" class="form-control" type="text" name="Upassword" value="" />
+                </div>
+                
+                <button class="btn btn-primary" type="submit">S'enregistrer</button>
+            </form>
+
+        </div>
+
         <p> cliquez ici pour ajouter un événement ...</p>
-        <div id="add"> + </div>
+        <div id="add"> + Evénement</div>
 
         <form class="form-group" role="group" id="add-event">
             <label for="event"> Titre </label><input class="form-control" type="text" id="event" placeholder="Titre"><br>
@@ -101,6 +171,17 @@
             <label for="date_start"> Date début </label> <input id="date_start"  class="form-control" type="text"><br>
             <label for="date_end"> Date fin </label> <input id="date_end" class="form-control" type="text"><br>
             <!-- <input id="date_start_3" class="form-control" type="text"><br> -->
+            <input class="btn btn-primary" type="submit" value="Ajouter">
+        </form>
+
+        <hr>
+
+
+        <p> cliquez ici pour ajouter une categorie ...</p>
+        <div id="addcat"> + Catégorie </div>
+
+        <form class="form-group" role="group" id="add_categorie">
+            <label for="titlecategorie"> Titre </label><input class="form-control" type="text" id="titlecategorie" placeholder="Titre"><br>
             <input class="btn btn-primary" type="submit" value="Ajouter">
         </form>
 
@@ -140,6 +221,13 @@
                             </div>        
                 </div>         
             </div>
+
+        <div class="footer">
+            <div class="panel panel-default">
+				<div class="panel-body">
+					&copy;2017 NEPASOUBLIER.COM
+				</div>
+        </div>
 
     </div> <!-- end container_form_events -->
 
