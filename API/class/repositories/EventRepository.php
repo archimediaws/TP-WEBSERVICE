@@ -86,4 +86,16 @@ class EventRepository extends Repository {
 
     }
 
+    function deleteAlloldEvent() {
+                $today = new Datetime();
+                $today = $today->format('Y-m-d');
+                
+                $query = "DELETE FROM event WHERE date_event_end < :today ";
+                $prep = $this->connection->prepare( $query );
+                $prep->execute([
+                    "today" => $today
+                ]);
+                return $prep->rowCount();
+        
+            }
 }

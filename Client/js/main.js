@@ -18,8 +18,6 @@ app.$addsignup.click(function(){
 });
 
 
-
-
 ////////// formulaire ajouter event et gestion des alerts  ///////////////
 
 // BTN ADD EVENT
@@ -39,8 +37,7 @@ app.$form_event.submit(function(event){
     var today = new Date();
 
     var event = new Event ( name, description, datestartevent, dateendevent );
-    app.addEvent( event );
-    event.display();
+    app.saveEvents(event);
     
     app.setAlertToday();
     app.displayAlertToday();
@@ -66,6 +63,8 @@ app.$addcat.click(function(){
     app.$form_categorie.slideToggle(200);
 });
 
+
+//EVENTS
 ////////// affichage et gestion des events  ///////////////
 
 //on click sur event 
@@ -77,8 +76,8 @@ app.currentEvent = event; // on va stocker event dans app on va pouvoir s'en res
 
 app.$titre.html( event.name );
 app.$descriptioninfos.html( event.description );
-app.$d_event.html( event.datestartevent );
-app.$e_event.html( event.dateendevent );
+app.$d_event.html( event.datestartevent.toLocaleDateString() );
+app.$e_event.html( event.dateendevent.toLocaleDateString() );
 
 });
 
@@ -87,14 +86,17 @@ $(document).on("click", "#close", function(){
     app.$infos.fadeOut(300);
 });
 
-// remove les events = destroy de localstorage et cache les infos
+// remove les events via API
+// remove les events = destroy et cache les infos
 $(document).on("click", ".event .close", function(event){
         event.stopPropagation(); // empeche la propagation de l'evenement au parent
        var index = $(".event").index( $(this).parent());
         app.removeEvent( index ); 
         app.$infos.fadeOut(300);
 });
-// remove les events du jour affichage "postit" = destroy de localstorage et cache les infos
+
+
+// remove les events du jour affichage "postit" = destroy  et cache les infos
 $(document).on("click", ".event .closetoday", function(event){
     event.stopPropagation(); // empeche la propagation de l'evenement au parent
     var index = $(".event").index( $(this).parent());
@@ -102,20 +104,22 @@ $(document).on("click", ".event .closetoday", function(event){
     app.$infos.fadeOut(300);
 });
 
- // remove les events proche affichage "postit" = destroy de localstorage et cache les infos
+ // remove les events proche affichage "postit" = destroy et cache les infos
 $(document).on("click", ".event .closeto", function(event){
     event.stopPropagation(); // empeche la propagation de l'evenement au parent
    var index = $(".event").index( $(this).parent());
     app.removeEvent( index ); 
     app.$infos.fadeOut(300);
 });
-// remove les old events affichage "postit" = destroy de localstorage et cache les infos
+// remove les old events affichage "postit" = destroy  et cache les infos
 $(document).on("click", ".event .closeold", function(event){
     event.stopPropagation(); // empeche la propagation de l'evenement au parent
    var index = $(".event").index( $(this).parent());
     app.removeOldEvent( index ); 
     app.$infos.fadeOut(300);
 });
+
+
 //remove de All old events affichage sur #infos
 $(document).on("click", "#deletealloldevents", function(event){
     event.stopPropagation(); // empeche la propagation de l'evenement au parent
@@ -139,6 +143,6 @@ $(document).on("click", ".ui-state-default.ui-state-active", function(){
 
 
 
-    window.onbeforeunload = function(){ //lorsque l'utilisateur quitte la page sauvegarde sur localstorage
-    app.saveEvents();
-}
+//     window.onbeforeunload = function(){ //lorsque l'utilisateur quitte la page sauvegarde sur localstorage
+//     app.saveEvents();
+// }

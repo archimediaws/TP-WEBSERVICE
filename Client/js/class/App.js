@@ -2,6 +2,9 @@ class App {
     
         constructor (){
 
+
+            this.url = "http://localhost/EcoleDuNum/Webservices/TP/TP-WEBSERVICE/API";
+
             // login
             this.$form_login = $("#login_form");//formulaire
             this.$usernamelogin = $("#usernamelogin"); // champ texte
@@ -26,7 +29,8 @@ class App {
             this.$description = $("#description");
             this.$date_start_event = $("#date_start");
             this.$date_end_event = $("#date_end");
-            
+            this.$datefinevent = $("#date_end").datepicker("getDate");
+
             this.$add = $("#add"); // bouton ajouter form event
 
              // formulaire ajout des categories
@@ -82,18 +86,31 @@ class App {
             this.$alertClosetoday.hide();
             this.$events_old.hide();
 
+            var that = this;
+            this.readEvents(function(){
+                that.displaydatecalendar();// affiche la date du jour dans le calendar
+                that.setAlertToday(); // set alert les events du jour
+                that.displayAlertToday();// affiche alerts des events du jour
+                that.setAlertCloseToday(); // set alert les events proche du jour
+                that.displayAlertCloseToday();// affiche les alertes des event proche du jour
+                that.setOldEventsToShow(); // set les events anciens
+                that.displayOldEventsToShow();// affiche les events anciens
+                that.initPickersCalendar();
+                // that.CalendarEventDay(today);
+            }); // lire boucle sur event dans events sur le bdd
 
-            this.readEvents(); // lire boucle sur event dans events sur le LS
             this.initPickersCalendar(); // init le datepicker calendar
-            this.displaydatecalendar();// affiche la date du jour dans le calendar
-            this.setAlertToday(); // set alert les events du jour
-            this.displayAlertToday();// affiche alerts des events du jour
-            this.setAlertCloseToday(); // set alert les events proche du jour
-            this.displayAlertCloseToday();// affiche les alertes des event proche du jour
-            this.setOldEventsToShow(); // set les events anciens
-            this.displayOldEventsToShow();// affiche les events anciens
+            // this.displaydatecalendar();// affiche la date du jour dans le calendar
+            // this.setAlertToday(); // set alert les events du jour
+            // this.displayAlertToday();// affiche alerts des events du jour
+            // this.setAlertCloseToday(); // set alert les events proche du jour
+            // this.displayAlertCloseToday();// affiche les alertes des event proche du jour
+            // this.setOldEventsToShow(); // set les events anciens
+            // this.displayOldEventsToShow();// affiche les events anciens
+            // this.initPickersCalendar();
+            // this.CalendarEventDay();
 
-            this.displayEvents(); // afiche les events
+            
 
             this.reinit(); //initialise valeur event + hide form et infos event + categorie
 
@@ -129,53 +146,125 @@ class App {
             this.events.push( event );
         }
 
-        saveEvents(){
+        saveEvents(event){
+
+            // saveEvents via API
+
+                        var that = this;
+                        $.ajax({
+                            url : this.url + "/event",
+                            method : "POST",
+                            data : {
+                                title : event.name,
+                                content : event.description,
+                                date_event_start : that.dateToString(event.datestartevent),
+                                date_event_end : that.dateToString(event.dateendevent),
+                                userId : "1",
+                                catId : "1"
+                            },
+                            dataType : "json",
+                            success : function( data ){
+                                // console.log( data );
+                                if( data.success == true ){
+                                    event.id = data.id;
+                                    event.display();
+                                    that.addEvent( event );
+                                }
+                                else {
+                                    alert( "Une erreur est survenue lors de l'enregistrement !" );
+                                }
+                
+                            },
+                            error : function( error ){
+                                console.log( error );
+                            }
+                        })
+            
+            // save via localstorage
             // le locale storage ne peut enregistere que des chaines de caracter
             // on utilise JSON.stringify pour trnasformer un tableau d'objet en chaine de cgharactere JSON/
-            var eventString  = JSON.stringify( this.events );
-            localStorage.setItem("events", eventString);
+            // var eventString  = JSON.stringify( this.events );
+            // localStorage.setItem("events", eventString);
+
 
         }
         
-        readEvents() {
-            var eventString = localStorage.getItem("events");
-            var events = JSON.parse( eventString );
+        readEvents(callback) {
+            // read les events via api
 
-            if(!events){ // s'il n y a pas d'event dans le LS alors on arrete le read
-                return;
-            }
+            var that = this;
+            $.ajax({
+                url : this.url +"/events",
+                method : "get",
+                dataType : "json",
+                success : function( data ){
+                    
+                    for( var data_event of data ){
+                        var event = new Event( data_event.title, data_event.content, new Date(data_event.date_event_start), new Date(data_event.date_event_end) ) ;
+                        event.id = data_event.id; // recupere l'event id pour s'en reservie ex: delete, uptade ...
+                        that.addEvent( event );
+                        event.display();
+                    }
+                    callback();
+                },
+                error : function( error ){
+                      console.log( error );
+                }
+            });
 
-            for(var eventObject of events){
-
-                var event = new Event ( eventObject.name, eventObject.description, new Date(eventObject.datestartevent), new Date(eventObject.dateendevent) );
-
-                this.addEvent( event );
-            }
+            // read les events via localstorage
+            // var eventString = localStorage.getItem("events");
+            // var events = JSON.parse( eventString );
+            // if(!events){ // s'il n y a pas d'event dans le LS alors on arrete le read
+            //     return;
+            // }
+            // for(var eventObject of events){
+            //     var event = new Event ( eventObject.name, eventObject.description, new Date(eventObject.datestartevent), new Date(eventObject.dateendevent) );
+            //     this.addEvent( event );
+            // }
         }
 
 
 
-        displayEvents(){
-
-            for( var event of this.events ){
-                event.display();
-            }
-
-        }
+        // displayEvents(){
+        //     for( var event of this.events ){
+        //         event.display();
+        //     }
+        // }
 
 
         removeEvent(index){
-
-            var event = this.events[index]; // on recupere l'event pour appeler destroy
-            event.$dom.fadeOut(300, function(){
-                event.destroy(); // on retire du DOM
-            })
             
-            this.events.splice(index, 1); // supprime 1 element à l'index indiqué
+            var event = this.events[index]; // on recupere l'event pour appeler destroy
+
+            var that = this;
+            $.ajax({
+                url : this.url +"/event/" + event.id,
+                method : "DELETE",
+                dataType : "json",
+                success : function( data ){
+    
+                    if( data.success == true ){
+                        event.$dom.fadeOut(300, function(){
+                            event.destroy(); // on retire du DOM
+                        })
+                        
+                        that.events.splice(index, 1);
+                    }
+                    else {
+                        alert("Un problème est survenu lors de la suppression !");
+                    }
+    
+                },
+                error : function( error ){
+                    console.log(error);
+                }
+            });
+        
 
         }
 
-        //// init datepicker ///  
+        //// init datepicker Form Event ///  
 
         initPickersEvents(){
             var options = {
@@ -299,11 +388,11 @@ class App {
 
             setOldEventsToShow(){
                 
-               var aujourdhui = this.today.getTime()-1*(24*60*60*1000);;
+               var aujourdhui = this.today.getTime()-1*(24*60*60*1000);
             
                this.eventsOldToShow =[]; // vide le tableau des eventsOlToShow avant chaque set
             
-                        for(var eventos of this.events){ // pour chaque date de fin d'event < a la date d'aujourdhui getTime = timesramp
+                        for(var eventos of this.events){ // pour chaque date de fin d'event < a la date d'aujourdhui getTime
                             
                             if(   aujourdhui > eventos.dateendevent.getTime() ){
                                this.addOldEventsToShow(eventos);
@@ -336,48 +425,64 @@ class App {
             }
 
             removeOldEvent(index){
-                
-                            var oldevent = this.events[index]; // on recupere l'oldevent pour appeler destroy
-                            oldevent.$domoldevent.fadeOut(300, function(){
-                                oldevent.destroyOldEvent(); // on retire du DOM
+
+                var event = this.events[index]; // on recupere l'oldevent pour appeler destroy
+
+                var that = this;
+                $.ajax({
+                    url : this.url +"/event/" + event.id,
+                    method : "DELETE",
+                    dataType : "json",
+                    success : function( data ){
+        
+                        if( data.success == true ){
+                            event.$domoldevent.fadeOut(300, function(){
+                                event.destroyOldEvent(); // on retire du DOM
                             })
                             
-                            this.events.splice(index, 1); // supprime 1 element à l'index indiqué
-                
+                            that.events.splice(index, 1);
                         }
+                        else {
+                            alert("Un problème est survenu lors de la suppression !");
+                        }
+        
+                    },
+                    error : function( error ){
+                        console.log(error);
+                    }
+                });
+                            
+                
+            }
 
 
             removeAllOldEvents(){
 
-                var aujourdhui = this.today.toLocaleDateString();
-                var dateendevent = this.$date_end_event;
-                
-                this.eventsOldToShow =[]; // vide le tableau des eventsOlToShow avant 
-                var tableauKey = [];
-                //remove sur tableau events
-                // boucle sur les event de events qui ont dateendevent < aujourdhui
 
-                        for(var key in this.events){ //  var "key" "in" tableau events
-                            var eventold = this.events[key]; // fait passer la "key" du tableau dans une variable eventold
-                            
-                            if( eventold.dateendevent < aujourdhui ){ //pour chaque date de fin d'event < a la date d'aujourdhui 
+                var that = this;
+                $.ajax({
+                    url : this.url +"/oldevents",
+                    method : "DELETE",
+                    dataType : "json",
+                    success : function( data ){
+        
+                        if( data.success == true ){
 
-                                     eventold.$domoldevent.fadeOut(300, function(){ // fadeout des elements du DOM
-                                        eventold.destroyOldEvent();// on retire du DOM
-                                          
-                                    })
-
-                                   tableauKey.push(key);   // on pousse les indexs(key) de events qui match avec la condition dans tableauKey         
-                                            
-                                    }
-                                               
-                            }
-
-                            for ( var value of tableauKey){ // pour chaque valeur du tableauKey 
-                            this.events.splice(value, 1);  // supprime 1 la value à l'index indiqué
-                            
-                            }
+                            that.eventsOldToShow =[];
+                            that.$events_old.hide();
+                                      
                         }
+                        else {
+                            alert("Il n'y a plus d'évenement à supprimer !");
+                        }
+        
+                    },
+                    error : function( error ){
+                        console.log(error);
+                    }
+                });
+  
+            }
 
                 
                 //// init datepicker for calendar///  
@@ -452,18 +557,25 @@ class App {
                
             CalendarEventDay(date){ 
                 
-                        if(!this.events){ // s'il n y a pas d'event dans le LS alors on arrete la boucle
+                        if(!this.events){ // s'il n y a pas d'event alors on arrete la boucle
                         return [false, ""];
                         }
 
                         for(var key in this.events){ //  var "key" "in" tableau events
                         var event = this.events[key]; // fait passer la "key" du tableau dans une variable 
                         
-                        if( event.datestartevent.getTime()  == date.getTime() ){ 
+                        // if( event.datestartevent.getTime()  == date.getTime() ){ 
+
+                        //     return [true, ""];// on affiche le jour calandar
+          
+                        //         }
+console.log(event);
+                        if( event.datestartevent  == date ){ 
 
                             return [true, ""];// on affiche le jour calandar
           
                                 }
+                        
                         
                     }
                     return [false, ""];//sinon, on cache le jour du calendar
@@ -477,9 +589,21 @@ class App {
                 return;
                 }
                 for ( var key in this.events){
+
                     date = this.events[key].datestartevent;
+
+                    if (selectedDate.valueOf() === date.valueOf()) {
+                                     // return  affiche le deatils de l'event    
+                    
+                    }
                 }
 
             }
-            
+            dateToString(date){
+                var dd = (date.getDate() < 10 ? '0' : '') + date.getDate();
+                var MM = ((date.getMonth() + 1) < 10 ? '0' : '') + (date.getMonth() + 1);
+                var yyyy = date.getFullYear();
+        
+                return (yyyy + "-" + MM + "-" + dd);
+             }  
     } //end APP

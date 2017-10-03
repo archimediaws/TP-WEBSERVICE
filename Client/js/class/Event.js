@@ -1,6 +1,8 @@
 class Event {
     
         constructor ( name, description, datestartevent, dateendevent){
+            
+            this.id = 0;
             this.name = name;
             this.description = description;
             this.datestartevent = datestartevent;
@@ -17,8 +19,6 @@ class Event {
         display(){
             
             var aujourdhui = this.today.getTime();
-            
-            
             var aujourdhuiplus1 = this.today.getTime()+1*(24*60*60*1000);
             var aujourdhuiplus2 = this.today.getTime()+2*(24*60*60*1000);
             var aujourdhuiplus3 = this.today.getTime()+3*(24*60*60*1000);

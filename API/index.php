@@ -323,7 +323,25 @@ Flight::route("DELETE /event/@id", function( $id ){
     
 });
 
-
+// EVENT DELETE / Supprimer tous les events anciens datedefin < aujourdhui
+Flight::route("DELETE /oldevents", function(){
+    
+        $status = [
+            "success" => false
+        ];
+    
+       
+        $bddManager = Flight::get("BddManager");
+        $repo = $bddManager->getEventRepository();
+        $rowCount = $repo->deleteAlloldEvent();
+    
+        if( $rowCount > 0 ){
+            $status["success"] = true;
+        }
+    
+        echo json_encode( $status );
+        
+    });
 // ROUTES USER
 
 // USER LOGIN 
